@@ -1,0 +1,39 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Lelann Bookshop website project",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cassandra18/lelann_bookshop.git"
+  },
+  "author": "Cassandra Lelei",
+  "license": "ISC",
+  "keywords": [
+    "bookshop",
+    "ecommerce",
+    "books",
+    "stationery",
+    "uniforms",
+    "Node.js",
+    "Express",
+    "PostgreSQL",
+    "Sequelize",
+    "Vite",
+    "Tailwind CSS",
+    "TypeScript"
+  ],
+  "bugs": {
+    "url": "https://github.com/cassandra18/lelann_bookshop/issues"
+  },
+  "homepage": "https://github.com/cassandra18/lelann_bookshop#readme",
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.6.2"
+  }
+}
