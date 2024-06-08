@@ -60,36 +60,33 @@ Make sure you have the following installed:
    ```bash
      npm install
    ```
+  
+3. Create a .env file in the root of your project and add your database credentials:
+
+  ```makefile
+    DB_USERNAME=your_db_username
+    DB_PASSWORD=your_password
+    DB_NAME=your_database_name
+    DB_NAME_TEST=your_database_name_test
+    DB_HOST=127.0.0.1
+ ```
 
 ### Database Setup
 
 1. Create a PostgreSQL database
 
-  ```sql
-  CREATE DATABASE lelann_bookshop;
-  ```
+```sql
+    CREATE DATABASE your_database_name;
+    CREATE DATABASE your_database_name_test;
+```
 
-2. Update he database configuration in `config/config.json`
-
-   ```json
-     {
-      "development": {
-        "username": "your_db_username",
-        "password": "your_db_password",
-        "database": "lelann_bookshop",
-        "host": "127.0.0.1",
-        "dialect": "postgres"
-      }
-    }
-   ```
-
-3. Run migrations to set up the database schema:
+2. Run migrations to set up the database schema:
 
      ```bash
        npx sequelize-cli db:migrate
      ```
 
-4. (Optional) Seed the database with initial data:
+3. (Optional) Seed the database with initial data:
 
      ```bash
        npx sequelize-cli db:seed:all
@@ -116,7 +113,7 @@ Make sure you have the following installed:
 ## Projeect Structure
 
 ```bash
-  lelann_bookshop/
+  lelann_bookshop/backend/
   ├── config/                 # Database configuration
   ├── migrations/             # Database migrations
   ├── models/                 # Sequelize models
@@ -124,6 +121,8 @@ Make sure you have the following installed:
   ├── tests/                  # Test cases
   ├── app.js                  # Express application
   ├── index.js                # Application entry point
+  ├── .env                    # Environment variables
+  ├── .gitignore              # Git ignore file
   ├── package.json            # Project metadata and dependencies
   └── README.md               # Project documentation
 ```
