@@ -57,7 +57,7 @@ Make sure you have the following installed:
 
 2. Install dependencies
 
-   ``bash
+   ```bash
      npm install
    ```
 
