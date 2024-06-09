@@ -1,0 +1,51 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Category {
+  id            String          @id @default(uuid())
+  name          String
+  description   String?
+  subcategories Subcategory[]
+}
+
+model Subcategory {
+  id            String         @id @default(uuid())
+  name          String
+  parent_id     String?
+  parent        Subcategory?  @relation("SubcategorySelfRelation", fields: [parent_id], references: [id])
+  subcategories Subcategory[] @relation("SubcategorySelfRelation")
+  products      Product[]
+  category_id   String
+  category      Category      @relation(fields: [category_id], references: [id])
+}
+
+model Product {
+  id             String         @id @default(uuid())
+  name           String
+  price          Float
+  condition      String
+  author_id      String?
+  author         Author?     @relation(fields: [author_id], references: [id])
+  publisher_id   String?
+  publisher      Publisher?  @relation(fields: [publisher_id], references: [id])
+  subcategory_id String
+  subcategory    Subcategory @relation(fields: [subcategory_id], references: [id])
+}
+
+model Author {
+  id    String      @id @default(uuid())
+  name  String
+  books Product[]
+}
+
+model Publisher {
+  id    String       @id @default(uuid())
+  name  String
+  books Product[]
+}
