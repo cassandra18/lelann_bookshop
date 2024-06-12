@@ -6,8 +6,18 @@ const prisma = new PrismaClient();
 // Add a new product
 const addProduct = async (req, res) => {
     try {
-        const { name, price, condition, auther_id, publisher_id, subcategory_id, description } = req.body;
-        const imageUrl = req.file ? `../uploads/${req.file.filename}` : null;
+        const { name, price, condition = 'new', auther_id, publisher_id, subcategory_id, description } = req.body;
+        
+        if (!req.file) {
+            return res.status(400).json({ message: 'Image file is required' });
+        }
+
+        const imageUrl = `../uploads/${req.file.filename}`;
+ 
+        // Validate inputs
+        if (!name || !price || !condition || !author_id || !publisher_id || !subcategory_id) {
+            return res.status(400).json({ message: 'All fields are required except description.' });
+        }
 
         // Create a new product
         const product = await prisma.product.create({

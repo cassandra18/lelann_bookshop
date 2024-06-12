@@ -30,7 +30,7 @@ const registerAdmin = async (req, res) => {
             },
         });
 
-        res.status(201).json({ message: 'Admin registered successfully' });
+        res.status(201).json(admin);
     } catch (error) {
         console.log(error);  
         res.status(500).json({ message: 'Internal server error' });

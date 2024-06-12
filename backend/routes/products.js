@@ -1,11 +1,11 @@
 const express = require('express');
-const authenticateAdmin = require('../middleware/authenticateAdmin');
+// const authenticateAdmin = require('../middleware/authenticateAdmin');
 const { addProduct } = require('../controllers/product');
 const upload = require('../middleware/uploadImage');
 const router = express.Router();
 
 
-router.use(authenticateAdmin);
+// router.use(authenticateAdmin);
 
 // Route to add a new product
 router.post('/product', upload.single('image'), addProduct);
