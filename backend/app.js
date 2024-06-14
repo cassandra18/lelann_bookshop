@@ -13,9 +13,10 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
 //app.use('/api/auth', require('./routes/auth'));
-app.use('/api/', require('./routes/products'));
-app.use('/api/admin', require('./routes/admin'));
-
+app.use('/api/', require('./routes/productRoutes'));
+app.use('/api/admin', require('./routes/adminRoutes'));
+app.use('/api/author', require('./routes/authorRoutes'));
+app.use('/api/publisher', require('./routes/publisherRoutes'));
 app.use(errorHanlder);
 
 const PORT = process.env.PORT || 3000;

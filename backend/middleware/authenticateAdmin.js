@@ -8,8 +8,11 @@ const authenticateAdmin = (req, res, next) => {
         }
 
         const token = authHeader.replace('Bearer ', '');
+        console.log(token);
+        
         jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
             if (err) {
+                console.error(err);
                 return res.status(401).json({ message: 'Unauthorized' });
             }
             req.admin = decoded; // Attach the decoded token to the request object

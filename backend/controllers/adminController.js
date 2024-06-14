@@ -49,14 +49,14 @@ const loginAdmin = async (req, res) => {
             },
         });
         if (!admin) {
-            return res.status(404).json({ message: 'Admin not found' });
+            return res.status(404).json({ message: 'Invalid email or password' });
         }
 
 
         // Compare passwords
         const isPasswordValid = await bcrypt.compare(password, admin.password);
         if (!isPasswordValid) {
-            return res.status(401).json({ message: 'Invalid password' });
+            return res.status(401).json({ message: 'Invalid email or  password' });
         }
 
         // Generate token 
@@ -69,7 +69,43 @@ const loginAdmin = async (req, res) => {
     }
 };
 
+// update admin
+const updateAdmin = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, email, password } = req.body;
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const admin = await prisma.admin.update({
+            where: { id },
+            data: {
+                name,
+                email,
+                password: hashedPassword,
+            },
+        });
+        res.status(200).json(admin);
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+
+// delete admin
+const deleteAdmin = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const admin = await prisma.admin.delete({
+            where: { id },
+        });
+        res.status(200).json(admin);
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
 module.exports = {
     registerAdmin,
     loginAdmin,
+    updateAdmin,
+    deleteAdmin,
 };
