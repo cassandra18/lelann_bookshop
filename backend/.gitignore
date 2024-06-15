@@ -1,3 +1,12 @@
 .env
 migrations
 node_modules
+
+
+  "name": "queenex encylopedia",
+  "description": "A new grade 5 queenex encyclopedia",
+  "condition": "new",
+  "price": "1050",
+  "imageUrl": "/home/cassadra18/Documents/Github/FullStack/lelann_bookshop/lelann_bookshop/backend/uploads/queenex_g5_encyclopedia.png"
+  
+  

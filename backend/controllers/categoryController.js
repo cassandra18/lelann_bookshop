@@ -30,6 +30,37 @@ const createCategory = async (req, res) => {
     }
 };
 
+// Function to get all categories
+const getCategories = async (req, res) => {
+    try {
+        const categories = await prisma.category.findMany()
+        res.status(200).json(categories)
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ message: 'Internal server error' })
+    }
+};
+
+// Function to get a single category by ID
+const getCategoryById = async (req, res) => {
+    try {
+        const { id } = req.params
+        
+        const existingCategory = await prisma.category.findUnique({
+            where: { id },
+        });
+
+        if (!existingCategory) {
+            return res.status(404).json({ message: 'Category not found' });
+        }
+        res.status(200).json(existingCategory);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+
 const updateCategory = async (req, res) => {
     try {
         const { id } = req.params;
@@ -90,4 +121,4 @@ const deleteCategory = async (req, res) => {
     }
 };
 
-module.exports = { createCategory, updateCategory, deleteCategory };
+module.exports = { createCategory, getCategories, getCategoryById, updateCategory, deleteCategory };

@@ -1,6 +1,7 @@
 const express = require('express');
 require('dotenv').config();
 const cors = require('cors');
+require('colors');
 const path = require('path');
 const app = express();
 const errorHanlder = require('./middleware/errorHandler');
@@ -17,11 +18,15 @@ app.use('/api/', require('./routes/productRoutes'));
 app.use('/api/admin', require('./routes/adminRoutes'));
 app.use('/api/author', require('./routes/authorRoutes'));
 app.use('/api/publisher', require('./routes/publisherRoutes'));
+app.use('/api/category', require('./routes/categoryRoutes'));
+app.use('/api/subcategory', require('./routes/subcategoryRoutes'));
+
+
 app.use(errorHanlder);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`Server is running on port ${PORT}`.cyan);
 });
 
 

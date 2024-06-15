@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 // Add a new product
 const addProduct = async (req, res) => {
     try {
-        const { name, price, condition = 'new', author_id, publisher_id, subcategory_id, description } = req.body;
+        const { name, price, condition = 'NEW', author_id, publisher_id, subcategory_id, description } = req.body;
         
         const subcategory = await prisma.subcategory.findUnique({ where: { id: subcategory_id } });
         const author = await prisma.author.findUnique({ where: { id: author_id } });
@@ -49,10 +49,6 @@ const addProduct = async (req, res) => {
             },
         });
         
-        if (!product) {
-            return res.status(400).json({ message: 'Failed to add product' });
-        }
-
         res.status(201).json(product);
     } catch (error) {
         console.error(error);
@@ -118,6 +114,30 @@ const updateProduct = async (req, res) => {
         if (!existingProduct) {
             return res.status(404).json({ message: 'Product not found' });
         }
+        
+        // Validate existence of subcategory if provided
+        if (subcategory_id) {
+            const subcategory = await prisma.subcategory.findUnique({ where: { id: subcategory_id } });
+            if (!subcategory) {
+                return res.status(400).json({ message: 'Invalid subcategory ID' });
+            }
+        }
+
+        // Validate existence of author and publisher if provided
+        if (author_id) {
+            const author = await prisma.author.findUnique({ where: { id: author_id } });
+            if (!author) {
+                return res.status(400).json({ message: 'Invalid author ID' });
+            }
+        }
+
+        if (publisher_id) {
+            const publisher = await prisma.publisher.findUnique({ where: { id: publisher_id } });
+            if (!publisher) {
+                return res.status(400).json({ message: 'Invalid publisher ID' });
+            }
+        }
+
 
         const product = await prisma.product.update({
             where: { id },
@@ -132,10 +152,6 @@ const updateProduct = async (req, res) => {
             },
         });
 
-        if (!product) {
-            console.error(error);
-            return res.status(400).json({ message: 'Error updating the product' });
-        }
 
         res.status(200).json(product);
     } catch (error) {
@@ -158,13 +174,9 @@ const deleteProduct = async (req, res) => {
             return res.status(404).json({ message: 'Product not found' });
         }
 
-        const product = await prisma.product.delete({
+        await prisma.product.delete({
             where: { id },
         });
-
-        if (!product) {
-            return res.status(400).json({ message: 'Error deleting product' });
-        }
 
         res.status(200).json({ message: 'Product deleted successfully' });
     } catch (error) {
