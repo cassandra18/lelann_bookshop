@@ -32,9 +32,31 @@ Lelann Bookshop is an e-commerce website that sells books, stationery, and unifo
 
 ## Technologies Used
 
-- **Backend**: Node.js, Express, PostgreSQL, Sequelize
-- **Frontend**: Vite, Tailwind CSS, TypeScript
-- **Testing**: Jest, Supertest
+#### Backend
+
+- **Nodejs**: Core Library
+- **Express**: Nodejs Framework used to develope backend
+- **PostgreSQL**: Database
+- **ORM**: Prisma
+
+#### Frontend
+
+- **React.js**: Core library
+- **Tailwind CSS**: For styling
+- **Redux Toolkit**: For state management
+- **React Router**: For routing
+- **Formik & Yup**: For forms and validation
+- **Axios**: For API calls
+- **Jest & React Testing Library**: For testing
+- **Vite**: For build process
+- **Material-UI**: For UI components
+- **React Intl**: For internationalization
+- **ESLint & Prettier**: For code quality
+- **Storybook**: For component development
+
+#### Testing
+
+- **Jest**
 
 ## Getting Started
 
@@ -60,71 +82,169 @@ Make sure you have the following installed:
    ```bash
      npm install
    ```
-  
-3. Create a .env file in the root of your project and add your database credentials:
 
-  ```makefile
-    DB_USERNAME=your_db_username
-    DB_PASSWORD=your_password
-    DB_NAME=your_database_name
-    DB_NAME_TEST=your_database_name_test
-    DB_HOST=127.0.0.1
- ```
+3. Create a .env file in the root of your project and add your database credentials:
 
 ### Database Setup
 
-1. Create a PostgreSQL database
+### Step 1: Install PostgreSQL
 
-```sql
-    CREATE DATABASE your_database_name;
-    CREATE DATABASE your_database_name_test;
-```
+1.  **Download and Install PostgreSQL**:
 
-2. Run migrations to set up the database schema:
+    - Follow the instructions for your operating system to download and install PostgreSQL from the official [PostgreSQL website](https://www.postgresql.org/download/).
 
-     ```bash
-       npx sequelize-cli db:migrate
-     ```
+2.  **Start PostgreSQL**:
 
-3. (Optional) Seed the database with initial data:
+    - After installation, start the PostgreSQL service. This can usually be done via your operating system's service manager or by running the following command:
 
-     ```bash
-       npx sequelize-cli db:seed:all
-     ```
+    `sudo service postgresql start`
+
+3.  **Access PostgreSQL**:
+
+    - Access the PostgreSQL command-line interface (psql) by running:
+
+    `psql -U postgres`
+
+### Step 2: Create a Database and User
+
+1.  **Create a New Database**:
+
+    - Once inside the PostgreSQL command-line interface, create a new database by running:
+
+    `CREATE DATABASE mydatabase;`
+
+2.  **Create a New User**:
+
+    - Create a new user and grant privileges on the newly created database:
+
+    ```
+      CREATE USER myuser WITH PASSWORD 'mypassword';
+      GRANT ALL PRIVILEGES ON DATABASE mydatabase TO myuser;
+    ```
+
+### Step 3: Set Up Prisma ORM
+
+1.  **Initialize a New Node.js Project**:
+
+    - If you haven't already, initialize a new Node.js project and install Prisma:
+
+    ```
+      mkdir myproject
+      cd myproject
+      npm init -y
+      npm install prisma --save-dev
+      npx prisma init
+    ```
+
+2.  **Install the Prisma Client**:
+
+    - Install the Prisma Client as a dependency:
+
+    `npm install @prisma/client`
+
+3.  **Configure the .env File**:
+
+    - In the root of your project, Prisma will have created a `.env` file. Add your database credentials to this file:
+
+    `DATABASE_URL="postgresql://myuser:mypassword@localhost:5432/mydatabase"`
+
+### Step 4: Define Your Data Model
+
+1.  **Update the Prisma Schema**:
+
+    - Open the `prisma/schema.prisma` file and define your data model.
+
+### Step 5: Migrate the Database
+
+1.  **Create a Migration**:
+
+    - Run the following command to create a migration based on your data model:
+
+    `npx prisma migrate dev --name init`
+
+2.  **Check the Database**:
+
+    - Verify that the migration was successful and that the tables were created in your PostgreSQL database:
+
+    ```
+    psql -U myuser -d mydatabase
+    \dt
+    ```
+
+### Step 6: Use Prisma Client in Your Project
+
+1.  **Generate the Prisma Client**:
+
+    - Generate the Prisma Client based on your schema:
+
+    `npx prisma generate`
 
 ### Running the Application
 
 1. Start the server
 
-     ```bash
-       npm start
-     ```
+   ```bash
+     npm start
+   ```
 
-2. The server will be running at ```http://localhost:3000```.
+2. The server will be running at `http://localhost:3000`.
 
 ### Running the Test
 
 1. Run the tests using Jest:
 
-  ```bash
-    npm test
-  ```
+```bash
+  npm test
+```
 
 ## Projeect Structure
 
-```bash
-  lelann_bookshop/backend/
-  ├── config/                 # Database configuration
-  ├── migrations/             # Database migrations
-  ├── models/                 # Sequelize models
-  ├── seeders/                # Database seeders
-  ├── tests/                  # Test cases
-  ├── app.js                  # Express application
-  ├── index.js                # Application entry point
-  ├── .env                    # Environment variables
-  ├── .gitignore              # Git ignore file
-  ├── package.json            # Project metadata and dependencies
-  └── README.md               # Project documentation
+```
+lelann_bookshop/
+├── backend/
+│   ├── config/                 # Database configuration
+│   ├── controllers/            # CRUD operations
+│   ├── middleware/             # middleware
+│   ├── prisma/                 # Database schema and migration
+│   ├── routes/                 # RESTAPI endpoints
+│   ├── uploads/                # Images uploaded to the databases
+│   ├── utils/                  # Initialize database
+│   ├── tests/                  # Test cases
+│   ├── app.js                  # Application entry point
+│   ├── .env                    # Environment variables
+│   ├── .gitignore              # Git ignore file
+│   ├── package.json            # Project metadata and dependencies
+│   └── README.md               # Project documentation
+├── frontend/
+│   ├── public/                 # Public files like index.html
+│   │   ├── index.html          # HTML template
+│   │   ├── favicon.ico         # Favicon
+│   │   └── manifest.json       # Web app manifest
+│   ├── src/
+│   │   ├── assets/             # Static assets like images, fonts
+│   │   ├── components/         # Reusable components
+│   │   │   ├── Header.js       # Header component
+│   │   │   ├── Footer.js       # Footer component
+│   │   │   └── ...
+│   │   ├── pages/              # Page components
+│   │   │   ├── HomePage.js     # Home page
+│   │   │   ├── ProductPage.js  # Product details page
+│   │   │   └── ...
+│   │   ├── services/           # API calls
+│   │   │   ├── api.js          # API service
+│   │   │   └── ...
+│   │   ├── App.js              # Main App component
+│   │   ├── index.js            # Entry point
+│   │   ├── routes.js           # Application routes
+│   │   └── styles/             # Global styles
+│   │       ├── index.css       # Global CSS
+│   │       └── ...
+│   ├── .gitignore              # Git ignore file
+│   ├── package.json            # Project metadata and dependencies
+│   ├── README.md               # Project documentation
+│   └── .env                    # Environment variables for frontend
+└── README.md                   # Root project documentation
+
 ```
 
 ## Contributing

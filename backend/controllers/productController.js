@@ -5,11 +5,11 @@ const prisma = new PrismaClient();
 // Add a new product
 const addProduct = async (req, res) => {
     try {
-        const { name, price, condition = 'NEW', author_id, publisher_id, subcategory_id, description } = req.body;
+        const { name, price, condition = 'NEW', authorId, publisherId, subcategoryId, subject} = req.body;
         
-        const subcategory = await prisma.subcategory.findUnique({ where: { id: subcategory_id } });
-        const author = await prisma.author.findUnique({ where: { id: author_id } });
-        const publisher = await prisma.publisher.findUnique({ where: { id: publisher_id } });
+        const subcategory = await prisma.subcategory.findUnique({ where: { id: subcategoryId } });
+        const author = await prisma.author.findUnique({ where: { id: authorId } });
+        const publisher = await prisma.publisher.findUnique({ where: { id: publisherId } });
 
         // Validate existence of subcategory, author, and publisher
         if (!subcategory) {
@@ -23,9 +23,11 @@ const addProduct = async (req, res) => {
         }
 
         // Validate required fields
-        if (!name || !price || !author_id || !publisher_id || !subcategory_id) {
+        if (!name || !price || !authorId || !publisherId || !subcategoryId) {
             return res.status(400).json({ message: 'Name, price, author ID, publisher ID, and subcategory ID are required fields' });
         }
+
+        console.log(req.file);
 
         // Check if image file is uploaded
         if (!req.file) {
@@ -33,19 +35,22 @@ const addProduct = async (req, res) => {
         }
 
         // Construct image URL based on server configuration
-        const imageUrl = `../uploads/${req.file.filename}`;
+        const image = `../uploads/${req.file.filename}`;
+
+        // Convert price to float
+        const priceFloat = parseFloat(price);
 
         // Create a new product
         const product = await prisma.product.create({
             data: {
                 name,
-                price,
+                price: priceFloat,
                 condition,
-                description,
-                author: { connect: { id: author_id } },
-                publisher: { connect: { id: publisher_id } },
-                subcategory: { connect: { id: subcategory_id } },
-                imageUrl,
+                subject,
+                author: { connect: { id: authorId } },
+                publisher: { connect: { id: publisherId } },
+                subcategory: { connect: { id: subcategoryId } },
+                image,
             },
         });
         
@@ -104,7 +109,7 @@ const getProductById = async (req, res) => {
 const updateProduct = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, price, condition, author_id, publisher_id, subcategory_id, description } = req.body;
+        const { name, price, condition, authorId, publisherId, subcategoryId, subject} = req.body;
 
         // Check if the product exists
         const existingProduct = await prisma.product.findUnique({
@@ -116,28 +121,29 @@ const updateProduct = async (req, res) => {
         }
         
         // Validate existence of subcategory if provided
-        if (subcategory_id) {
-            const subcategory = await prisma.subcategory.findUnique({ where: { id: subcategory_id } });
+        if (subcategoryId) {
+            const subcategory = await prisma.subcategory.findUnique({ where: { id: subcategoryId } });
             if (!subcategory) {
                 return res.status(400).json({ message: 'Invalid subcategory ID' });
             }
         }
 
         // Validate existence of author and publisher if provided
-        if (author_id) {
-            const author = await prisma.author.findUnique({ where: { id: author_id } });
+        if (authorId) {
+            const author = await prisma.author.findUnique({ where: { id: authorId } });
             if (!author) {
                 return res.status(400).json({ message: 'Invalid author ID' });
             }
         }
 
-        if (publisher_id) {
-            const publisher = await prisma.publisher.findUnique({ where: { id: publisher_id } });
+        if (publisherId) {
+            const publisher = await prisma.publisher.findUnique({ where: { id: publisherId } });
             if (!publisher) {
                 return res.status(400).json({ message: 'Invalid publisher ID' });
             }
         }
 
+        const image = `../uploads/${req.file.filename}`;
 
         const product = await prisma.product.update({
             where: { id },
@@ -145,10 +151,11 @@ const updateProduct = async (req, res) => {
                 name,
                 price,
                 condition,
-                description,
-                author: { connect: { id: author_id } },
-                publisher: { connect: { id: publisher_id } },
-                subcategory: { connect: { id: subcategory_id } },
+                subject,
+                image,
+                author: { connect: { id: authorId } },
+                publisher: { connect: { id: publisherId } },
+                subcategory: { connect: { id: subcategoryId } },
             },
         });
 
@@ -185,4 +192,4 @@ const deleteProduct = async (req, res) => {
     }
 };
 
-module.exports = { addProduct, getProducts, getProductById, updateProduct, deleteProduct };
+module.exports = { addProduct, getProducts, getProductById, updateProduct, deleteProduct};
