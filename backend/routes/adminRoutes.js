@@ -3,10 +3,10 @@ const router = express.Router();
 const { registerAdmin, loginAdmin, updateAdmin, deleteAdmin } = require('../controllers/adminController');
 
 
-router.post('/register', registerAdmin);
-router.post('/login', loginAdmin);
-router.put('/update/:id', updateAdmin);
-router.delete('/delete/:id', deleteAdmin);
+router.post('/register-admin', registerAdmin);
+router.post('/login-admin', loginAdmin);
+router.put('/update-admin/:id', updateAdmin);
+router.delete('/delete-admin/:id', deleteAdmin);
 
 
 module.exports = router;

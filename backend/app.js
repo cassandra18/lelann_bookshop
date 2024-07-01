@@ -20,7 +20,7 @@ app.use('/api/author', require('./routes/authorRoutes'));
 app.use('/api/publisher', require('./routes/publisherRoutes'));
 app.use('/api/category', require('./routes/categoryRoutes'));
 app.use('/api/subcategory', require('./routes/subcategoryRoutes'));
-
+app.use('/api/user', require('./routes/userRoutes'));
 
 app.use(errorHanlder);
 
