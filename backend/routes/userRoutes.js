@@ -1,22 +1,27 @@
 const express = require('express');
 const router = express.Router();
-const userController = require('../controllers/userController');
+const UserControllers = require('../controllers/userController');
 const authenticateAdmin = require('../middleware/authenticateAdmin');
+const { authenticateGoogle, handleGoogleCallback } = require('../middleware/oauthMiddleware');
 
 // User routes
-router.post('/register', userController.registerUser);
-router.post('/login', userController.loginUser);
-router.put('/update-profile/:id', userController.updateUserProfile);
-router.delete('/delete-account/:id', userController.deleteUserAccount);
-router.get('/see-profile/:id', userController.getUserProfile);
-router.put('/update-password/:id', userController.updateUserPassword);
+router.post('/register', UserControllers.registerUser);
+router.post('/login', UserControllers.loginUser);
+router.put('/update-profile/:id', UserControllers.updateUserProfile);
+router.delete('/delete-account/:id', UserControllers.deleteUserAccount);
+router.get('/see-profile/:id', UserControllers.getUserProfile);
+router.put('/update-password/:id', UserControllers.updateUserPassword);
 
 
 // Admin routes
-router.get('/all-users',  authenticateAdmin, userController.getAllUsers);
-router.get('/all-users/:id',  authenticateAdmin, userController.getUserById);
-router.delete('/delete-user/:id',  authenticateAdmin, userController.deleteUserById);
-router.put('/update-user/:id',  authenticateAdmin, userController.updateUserById);
+router.get('/all-users',  authenticateAdmin, UserControllers.getAllUsers);
+router.get('/all-users/:id',  authenticateAdmin, UserControllers.getUserById);
+router.delete('/delete-user/:id',  authenticateAdmin, UserControllers.deleteUserById);
+router.put('/update-user/:id',  authenticateAdmin, UserControllers.updateUserById);
+
+// Google OAuth routes
+router.get('/auth/google', authenticateGoogle);
+router.get('/auth/google/callback', handleGoogleCallback);
 
 
 module.exports = router;

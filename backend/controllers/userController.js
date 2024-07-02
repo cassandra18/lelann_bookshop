@@ -1,10 +1,12 @@
 const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const {validateRegisterInput } = require('../middleware/validation');
 const { isPasswordStrong } = require('../utils/passwordCheck');
 const { PrismaClientKnownRequestError, PrismaClientValidationError } = require('@prisma/client');
+
+
+const prisma = new PrismaClient();
 
 // Controller for user registration
 
